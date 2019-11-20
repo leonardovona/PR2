@@ -129,67 +129,47 @@ public class DataBoard1<E extends Data> implements DataBoard<E> {
 	}
 
 
-	// Crea la lista dei dati in bacheca su una determinata categoria se vengono
-	// rispettati i controlli di identità
 	@Override
 	public List<E> getDataCategory(String passw, String Category)
 			throws NullPointerException, AuthenticationFailedException, UnvalidCategoryException {
+		if (Category == null || passw == null)
+			throw new NullPointerException("Value can't be null");
+		if (!passw.equals(owner.getPassword()))
+			throw new AuthenticationFailedException("Authentication Failed");
+		if (categories.get(Category) == null)
+			throw new UnvalidCategoryException("Category " + Category + " does not exists");
+
+		return categories.get(Category).getElements();
 
 	}
-	/*
-	 * REQUIRES: passw != null, Category != null, passw.equals(owner.getPassword()),
-	 * exists i. 0 <= i < csize() => Category.equals(category_i.getName()) THROWS:
-	 * se passw == null o Category == null lancia NullPointerException se
-	 * !passw.equals(owner.getPassword()) lancia AuthenticationFailedException se
-	 * for all i. 0 <= i < csize() => !Category.equals(category_i.getName()) lancia
-	 * UnvalidCategoryException EFFECTS: restituisce una lista contenente i dati
-	 * della categoria Category
-	 */
-
-	// restituisce un iteratore (senza remove) che genera tutti i dati in bacheca
-	// ordinati rispetto al numero di like.
+	
 	@Override
 	public Iterator<E> getIterator(String passw) throws NullPointerException, AuthenticationFailedException {
-
+		if (passw == null)
+			throw new NullPointerException("Value can't be null");
+		if (!passw.equals(owner.getPassword()))
+			throw new AuthenticationFailedException("Authentication Failed");
+		return new DB1Iterator<E>(categories);
 	}
-	/*
-	 * REQUIRES: passw != null, passw.equals(owner.getPassword()) THROWS: se passw
-	 * == null lancia NullPointerException se !passw.equals(owner.getPassword())
-	 * lancia AuthenticationFailedException EFFECTS: restituisce un iteratore senza
-	 * remove che itera su tutti i dati in bacheca ordinati rispetto al numero di
-	 * like
-	 */
 
-	// Aggiunge un like a un dato
 	@Override
 	public void insertLike(String friend, E data)
 			throws NullPointerException, UnvalidFriendException, UnvalidDataException {
-
+		if(!getCategory(data).isFriend(friend))
+			throw new UnvalidFriendException(friend + " is not a friend");
+		
+		try {
+			get(owner.getPassword(), data).addLike();
+		} catch (AuthenticationFailedException e) {
+			e.printStackTrace();
+		}
 	}
-	/*
-	 * REQUIRES: friend != null, data != null, exists i. 0 <= i < csize() => exists
-	 * j. 0 <= j < category_i.esize() => data.equals(category_i.el_j) dato i tale
-	 * che data appartiene a category_i, allora exists j. 0 <= j <
-	 * category_i.fsize() => friend.equals(category_i.friend_j) THROWS: se friend ==
-	 * null o data == null lancia NullPointerException se forall i. 0 <= i < csize()
-	 * => forall j. 0 <= j < category_i.esize() => !dato.equals(category_i.el_j)
-	 * lancia UnvalidDataException dato i tale che data appartiene a category_i, se
-	 * for all j. 0 <= j < category_i.fsize() => !friend.equals(category_i.friend_j)
-	 * lancia UnvalidFriendException MODIFIES: this EFFECTS: aumenta di 1 il numero
-	 * di like relativi a data
-	 */
 
-	// Legge un dato condiviso restituisce un iteratore (senza remove) che genera
-	// tutti i dati inn bacheca condivisi.
 	@Override
 	public Iterator<E> getFriendIterator(String friend) throws NullPointerException {
-
+		return new FriendIterator1<E>(this.categories, friend);
 	}
-	/*
-	 * REQUIRES: friend != null THROWS: se friend == null lancia
-	 * NullPointerException EFFECTS: restituisce un iteratore senza remove che itera
-	 * su tutti i dati in bacheca condivisi con friend.
-	 */
+
 
 	@Override
 	public int csize() {
@@ -207,6 +187,5 @@ public class DataBoard1<E extends Data> implements DataBoard<E> {
 		throw new UnvalidDataException("Data not found");
 		 
 	}
-	
 
 }

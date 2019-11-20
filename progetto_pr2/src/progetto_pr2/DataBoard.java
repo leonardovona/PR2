@@ -171,10 +171,11 @@ public interface DataBoard<E extends Data> {
 	public Iterator<E> getIterator(String passw) throws NullPointerException, AuthenticationFailedException;
 	/*
 	 * REQUIRES: passw != null,
-	 * 			 passw.equals(owner.getPassword())
+	 * 			 passw.equals(owner.getPassword()),
+	 * 			 this non deve essere modificato mentre l'iteratore è in uso
 	 * THROWS: se passw == null lancia NullPointerException
 	 * 		   se !passw.equals(owner.getPassword()) lancia AuthenticationFailedException
-	 * EFFECTS: restituisce un iteratore senza remove che itera su tutti i dati in bacheca ordinati rispetto al numero di like
+	 * EFFECTS: restituisce un iteratore che produrrà tutti gli elementi in bacheca ordinati in modo descrescente rispetto al numero di like
 	 */
 	
 	// Aggiunge un like a un dato

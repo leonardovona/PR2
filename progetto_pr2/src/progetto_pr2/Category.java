@@ -1,5 +1,7 @@
 package progetto_pr2;
 
+import java.util.List;
+
 public interface Category<E extends Data> {
 	/*
 	 * Overview: Categoria di dato presente in una bacheca. Una categoria ha un
@@ -110,5 +112,18 @@ public interface Category<E extends Data> {
 	 * MODIFIES: this
 	 * EFFECTS: rimuove e restituisce dato associato alla categoria this
 	 */
+	
+	public List<E> getElements();
+	/*
+	 * EFFECTS: restituisce una lista contenente le copie degli elementi di questa categoria
+	 */
+	
+	public boolean isFriend(String friend);
+	/*
+	 * REQUIRES: friend != null
+	 * THROWS: se friend == null lancia NullPointerException
+	 * EFFECTS: restituisce true se friend appartiene all'insieme degli amici, false altrimenti
+	 */
+	
 }
  

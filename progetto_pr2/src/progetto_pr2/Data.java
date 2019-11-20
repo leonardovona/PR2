@@ -23,4 +23,20 @@ public interface Data {
 	
 	public boolean equals();
 	
+	public int getLikes();
+	/*
+	 * EFFECTS: restituisce il numero di like relativi al dato
+	 */
+	
+	public Data clone();
+	/*
+	 * EFFECTS: restituisce una deep copy di this
+	 */
+	
+	public void addLike();
+	/*
+	 * EFFECTS: incrementa di 1 il numero di like
+	 */
+	
+	
 }

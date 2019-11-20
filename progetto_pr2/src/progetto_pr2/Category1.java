@@ -1,5 +1,7 @@
 package progetto_pr2;
 
+import java.util.List;
+
 public class Category1<E extends Data> implements Category<E> {
 
 	public Category1(String name) {
@@ -64,6 +66,18 @@ public class Category1<E extends Data> implements Category<E> {
 	public E remove(E dato) throws NullPointerException, UnvalidDataException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<E> getElements() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isFriend(String friend) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
